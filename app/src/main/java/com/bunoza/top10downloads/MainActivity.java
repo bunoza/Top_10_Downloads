@@ -1,7 +1,12 @@
 package com.bunoza.top10downloads;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.SearchManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,26 +17,57 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemClickListener {
 
     private static final String TAG = "MainActivity";
-    private ListView listApps;
+    private List<FeedEntry> applications;
+    private RecyclerView recycler;
+    private RecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listApps = (ListView) findViewById(R.id.xmlListView);
+        recycler = findViewById(R.id.recyclerView);
+
+        applications = new ArrayList<>();
 
         Log.d(TAG, "onCreate: starting AsyncTask");
         DownloadData downloadData = new DownloadData();
         downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
         Log.d(TAG, "onCreate: done");
 
+    }
+
+    private void setupRecycler(){
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RecyclerAdapter(this);
+        recycler.setAdapter(adapter);
+    }
+
+    private void setupRecyclerData(){
+        adapter.setApplications(applications);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+//        try {
+            String query = applications.get(position).getName();
+            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+            intent.putExtra(SearchManager.QUERY, query); // query contains search string
+            startActivity(intent);
+
+//        }catch (UnsupportedEncodingException e){
+//
+//        }
     }
 
     private class DownloadData extends AsyncTask<String, Void, String>{
@@ -44,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onPostExecute: parameter is " + s);
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
+            applications = parseApplications.getApplications();
+            setupRecycler();
+            setupRecyclerData();
         }
 
         @Override

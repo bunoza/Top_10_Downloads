@@ -1,5 +1,7 @@
 package com.bunoza.top10downloads;
 
+import com.squareup.picasso.Picasso;
+
 public class FeedEntry {
     private String name;
     private String artist;
