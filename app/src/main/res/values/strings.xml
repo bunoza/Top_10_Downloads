@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Top 10 Downloads</string>
+    <string name="top10apps">http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml</string>
+    <string-array name="spinner_array">
+        <item>Top 10 Free Apps</item>
+        <item>Top 25 Free Apps</item>
+        <item>Top 10 Paid Apps</item>
+        <item>Top 25 Paid Apps</item>
+        <item>Top 10 Songs</item>
+        <item>Top 25 Songs</item>
+    </string-array>
+    <string-array name="spinner_array_rss">
+        <item>http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml</item>
+        <item>http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=25/xml</item>
+        <item>http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=10/xml</item>
+        <item>http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=25/xml</item>
+        <item>http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=10/xml</item>
+        <item>http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=25/xml</item>
+    </string-array>
 </resources>

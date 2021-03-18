@@ -10,7 +10,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -31,18 +34,38 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private List<FeedEntry> applications;
     private RecyclerView recycler;
     private RecyclerAdapter adapter;
+    private Spinner spinner;
+    private String source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recycler = findViewById(R.id.recyclerView);
+        spinner = findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                source = getResources().getStringArray(R.array.spinner_array_rss)[spinner.getSelectedItemPosition()];
+                Log.d(TAG, "onCreate: starting AsyncTask");
+                DownloadData downloadData = new DownloadData();
 
+                downloadData.execute(source);
+                Log.d(TAG, "onCreate: done");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        source = getResources().getStringArray(R.array.spinner_array_rss)[spinner.getSelectedItemPosition()];
         applications = new ArrayList<>();
 
         Log.d(TAG, "onCreate: starting AsyncTask");
         DownloadData downloadData = new DownloadData();
-        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+
+        downloadData.execute(source);
         Log.d(TAG, "onCreate: done");
 
     }
